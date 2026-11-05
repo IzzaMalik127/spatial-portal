@@ -1,0 +1,15 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature", "geometry": { "type": "Point", "coordinates": [74.3094, 31.5925] },
+      "properties": { "id": "LHR-001", "name": "Minar-e-Pakistan", "category": "Monument", "status": "Operational", "height": 62 } },
+    { "type": "Feature", "geometry": { "type": "Point", "coordinates": [74.3143, 31.5889] },
+      "properties": { "id": "LHR-002", "name": "Lahore Fort", "category": "Heritage Site", "status": "Operational", "area_ha": 20 } },
+    { "type": "Feature", "geometry": { "type": "Point", "coordinates": [74.3365, 31.5497] },
+      "properties": { "id": "LHR-003", "name": "Sample Utility Substation", "category": "Utility", "status": "Under Maintenance", "voltage_kv": 132 } },
+    { "type": "Feature", "geometry": { "type": "Polygon", "coordinates": [[[74.3070,31.5860],[74.3090,31.5860],[74.3090,31.5875],[74.3070,31.5875],[74.3070,31.5860]]] },
+      "properties": { "id": "BLD-101", "name": "Sample Office Block A", "category": "Building", "status": "Operational", "height": 45, "floors": 12 } },
+    { "type": "Feature", "geometry": { "type": "Polygon", "coordinates": [[[74.3105,31.5855],[74.3120,31.5855],[74.3120,31.5868],[74.3105,31.5868],[74.3105,31.5855]]] },
+      "properties": { "id": "BLD-102", "name": "Sample Warehouse B", "category": "Building", "status": "Planned", "height": 18, "floors": 3 } }
+  ]
+}

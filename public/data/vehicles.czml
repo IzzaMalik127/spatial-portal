@@ -1,0 +1,118 @@
+[
+  {
+    "id": "document",
+    "name": "Inspection drone feed",
+    "version": "1.0",
+    "clock": {
+      "interval": "2026-01-01T00:00:00Z/2026-01-01T00:02:00Z",
+      "currentTime": "2026-01-01T00:00:00Z",
+      "multiplier": 1,
+      "range": "LOOP_STOP",
+      "step": "SYSTEM_CLOCK_MULTIPLIER"
+    }
+  },
+  {
+    "id": "DRN-001",
+    "name": "Inspection Drone 1",
+    "description": "Time-dynamic CZML sample: patrols around Lahore Fort at 350 m (above terrain).",
+    "availability": "2026-01-01T00:00:00Z/2026-01-01T00:02:00Z",
+    "position": {
+      "epoch": "2026-01-01T00:00:00Z",
+      "interpolationAlgorithm": "LINEAR",
+      "cartographicDegrees": [
+        0,
+        74.312,
+        31.587,
+        350,
+        30,
+        74.317,
+        31.587,
+        350,
+        60,
+        74.317,
+        31.591,
+        350,
+        90,
+        74.312,
+        31.591,
+        350,
+        120,
+        74.312,
+        31.587,
+        350
+      ]
+    },
+    "point": {
+      "pixelSize": 16,
+      "color": {
+        "rgba": [
+          250,
+          204,
+          21,
+          255
+        ]
+      },
+      "outlineColor": {
+        "rgba": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "outlineWidth": 2
+    },
+    "path": {
+      "show": true,
+      "width": 3,
+      "leadTime": 0,
+      "trailTime": 60,
+      "material": {
+        "solidColor": {
+          "color": {
+            "rgba": [
+              250,
+              204,
+              21,
+              200
+            ]
+          }
+        }
+      }
+    },
+    "label": {
+      "text": "Inspection Drone 1",
+      "font": "600 13px sans-serif",
+      "style": "FILL_AND_OUTLINE",
+      "fillColor": {
+        "rgba": [
+          255,
+          255,
+          255,
+          255
+        ]
+      },
+      "outlineColor": {
+        "rgba": [
+          0,
+          0,
+          0,
+          255
+        ]
+      },
+      "outlineWidth": 3,
+      "pixelOffset": {
+        "cartesian2": [
+          0,
+          -22
+        ]
+      },
+      "distanceDisplayCondition": {
+        "distanceDisplayCondition": [
+          0,
+          12000
+        ]
+      }
+    }
+  }
+]
