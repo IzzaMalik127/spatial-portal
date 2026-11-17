@@ -54,3 +54,21 @@
 .swatch { width: 14px; height: 14px; border-radius: 3px; border: 1px solid rgba(255,255,255,.4); flex-shrink: 0; }
 
 .loadingChip { position: absolute; top: 12px; left: 50%; transform: translateX(-50%); z-index: 6; background: rgba(17,24,39,.92); padding: 6px 14px; border-radius: 999px; font-size: .8rem; pointer-events: none; }
+
+.viewer canvas { touch-action: none; }
+.notice { background: #1e293b; border: 1px solid #334155; border-radius: 8px; padding: 10px 12px; font-size: .82rem; }
+.notice p { margin: 6px 0 0; }
+.locked { background: #374151; color: #cbd5e1; }
+.offlineBanner { position: absolute; top: 60px; left: 50%; transform: translateX(-50%); z-index: 7; max-width: min(92%, 560px); background: #78350f; padding: 8px 14px; border-radius: 8px; font-size: .82rem; text-align: center; }
+.gestureHint { position: absolute; bottom: 24px; left: 50%; transform: translateX(-50%); z-index: 7; max-width: 92%; background: rgba(17,24,39,.94); padding: 10px 14px; border-radius: 10px; font-size: .85rem; text-align: center; }
+
+/* Touch screens: bigger tap targets, no hover-only UI, no iOS zoom-on-focus. */
+@media (pointer: coarse) {
+  .toggle, .home { min-height: 44px; min-width: 44px; font-size: 1rem; }
+  .layerLabel input[type="checkbox"] { width: 22px; height: 22px; }
+  .opacity input { min-height: 28px; }
+  .iconBtn { min-width: 44px; min-height: 44px; }
+  .suggestions button { padding: 12px 10px; font-size: .95rem; }
+  .search input { font-size: 16px; }
+  .hoverChip { display: none; }
+}

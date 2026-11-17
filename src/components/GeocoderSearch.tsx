@@ -64,7 +64,7 @@ export function GeocoderSearch({ viewer }: { viewer: Cesium.Viewer | null }) {
         aria-label="Search places"
       />
       {status === 'loading' && <small className={styles.muted}>Searching…</small>}
-      {status === 'error' && <small className={styles.error}>Search failed. Check your connection.</small>}
+      {status === 'error' && <small className={styles.error}>Search needs an internet connection.</small>}
       {results.length > 0 && (
         <ul className={styles.suggestions} role="listbox">
           {results.map((r) => (

@@ -3,6 +3,7 @@ import * as Cesium from 'cesium';
 import styles from '../styles/ui.module.css';
 import { configureCamera, jumpHome } from '../utils/camera';
 import { configureNetwork } from '../utils/network';
+import { addBuiltInBaseMap } from '../utils/layers';
 
 Cesium.Ion.defaultAccessToken = import.meta.env.VITE_CESIUM_ION_TOKEN ?? '';
 configureNetwork();
@@ -34,6 +35,7 @@ export function CesiumViewer({ onReady }: Props) {
     viewer.cesiumWidget.screenSpaceEventHandler.removeInputAction(Cesium.ScreenSpaceEventType.LEFT_DOUBLE_CLICK);
     viewer.scene.debugShowFramesPerSecond = import.meta.env.DEV; // FPS meter in dev
     const removeCameraListener = configureCamera(viewer);
+    void addBuiltInBaseMap(viewer).catch(() => {}); // offline-capable world map under every other layer
     jumpHome(viewer); // open directly over Lahore (no fly-in from space)
     onReady(viewer);
 

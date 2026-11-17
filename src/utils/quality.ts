@@ -1,4 +1,5 @@
 import type { Quality } from '../types';
+import type { DeviceInfo } from '../config';
 
 /** Render-quality presets. Pure data so it can be unit-tested without WebGL. */
 export interface QualityPreset {
@@ -27,4 +28,14 @@ export const LOW_FPS = 28;
 export function nextQuality(current: Quality, fps: number): Quality {
   if (fps >= LOW_FPS) return current;
   return current === 'high' ? 'balanced' : 'low';
+}
+
+/** Highest pixel density we render at in native mode (phones can report 3x, which is very expensive). */
+export const MAX_NATIVE_DPR = 2;
+
+/** Auto mode's starting preset: phones, tablets and weak computers start light; everything else starts balanced. */
+export function pickInitialQuality(d: DeviceInfo): Quality {
+  if (d.smallScreen || d.touch) return 'low';
+  if ((d.memoryGb !== undefined && d.memoryGb <= 2) || (d.cores !== undefined && d.cores <= 2)) return 'low';
+  return 'balanced';
 }

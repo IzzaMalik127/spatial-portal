@@ -1,6 +1,6 @@
 import * as Cesium from 'cesium';
 import type { Quality } from '../types';
-import { getPreset } from './quality';
+import { MAX_NATIVE_DPR, getPreset } from './quality';
 import { maxPitch } from './tilt';
 import { boundsToView } from './geo';
 
@@ -70,7 +70,8 @@ export function applyQuality(viewer: Cesium.Viewer, quality: Quality) {
   viewer.scene.msaaSamples = p.msaaSamples;
   viewer.scene.postProcessStages.fxaa.enabled = p.msaaSamples === 1; // cheap AA when MSAA is off
   viewer.useBrowserRecommendedResolution = !p.nativeResolution; // native = sharper on HiDPI screens
-  viewer.resolutionScale = p.resolutionScale;
+  const dpr = (typeof window !== 'undefined' && window.devicePixelRatio) || 1;
+  viewer.resolutionScale = p.nativeResolution ? Math.min(p.resolutionScale, MAX_NATIVE_DPR / dpr) : p.resolutionScale;
 }
 
 /**

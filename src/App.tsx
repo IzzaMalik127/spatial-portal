@@ -12,6 +12,11 @@ import { useLayerSync } from './hooks/useLayerSync';
 import { useAdaptiveQuality } from './hooks/useAdaptiveQuality';
 import { useAssetPicking } from './hooks/useAssetPicking';
 import { MiniMap } from './components/MiniMap';
+import { OfflineBanner } from './components/OfflineBanner';
+import { TokenNotice } from './components/TokenNotice';
+import { GestureHint } from './components/GestureHint';
+import { getDeviceInfo } from './config';
+import { pickInitialQuality } from './utils/quality';
 import { applyQuality, flyHome } from './utils/camera';
 import type { Quality } from './types';
 import styles from './styles/ui.module.css';
@@ -20,10 +25,12 @@ function Portal() {
   const { state, dispatch } = useApp();
   const [viewer, setViewer] = useState<Cesium.Viewer | null>(null);
   const [mode, setMode] = useState<'auto' | Quality>('auto');
-  const [active, setActive] = useState<Quality>('balanced');
+  // Phones and weak computers start on a lighter preset; Auto steps down further only if FPS stays low.
+  const [start] = useState<Quality>(() => pickInitialQuality(getDeviceInfo()));
+  const [active, setActive] = useState<Quality>(start);
   const onMode = (m: 'auto' | Quality) => {
     setMode(m);
-    setActive(m === 'auto' ? 'balanced' : m);
+    setActive(m === 'auto' ? start : m);
   };
   useEffect(() => {
     if (viewer) applyQuality(viewer, active);
@@ -46,6 +53,7 @@ function Portal() {
           <h1>3D Spatial Portal</h1>
         </header>
         <GeocoderSearch viewer={viewer} />
+        <TokenNotice />
         <LayerPanel layers={state.layers} dispatch={dispatch} />
         <Legend />
         <section className={styles.panel} aria-label="Render quality">
@@ -75,6 +83,8 @@ function Portal() {
             <AssetInfoPanel asset={state.selected} onClose={clearSelection} />
           </div>
         )}
+        <OfflineBanner />
+        <GestureHint />
         <LoadingChip viewer={viewer} />
         {state.hoveredName && <div className={styles.hoverChip}>{state.hoveredName}</div>}
         <CesiumViewer onReady={onReady} />

@@ -13,6 +13,8 @@ export interface LayerState {
   visibleAboveM?: number;
   /** Imagery layer is only drawn while the camera is lower than this (metres). */
   visibleBelowM?: number;
+  /** Needs a Cesium ion token; without one the layer is switched off with a friendly note. */
+  requiresToken?: boolean;
   status: LoadStatus;
   error?: string;
 }

@@ -1,4 +1,5 @@
 import { createContext, useContext, useReducer, type Dispatch, type ReactNode } from 'react';
+import { isSmallScreen } from '../config';
 import type { LayerId, LayerState, LoadStatus, SelectedAsset } from '../types';
 
 export interface AppState {
@@ -21,8 +22,8 @@ export const initialState: AppState = {
     { id: 'satellite', opacity: 1, label: 'High-res satellite imagery', description: 'Esri World Imagery (WMTS)', enabled: true, status: 'idle' },
     { id: 'osm', opacity: 0.5, visibleBelowM: 200_000, label: 'Street map', description: 'Esri World Street Map · appears when closer than 200 km', enabled: false, status: 'idle' },
     { id: 'wms', opacity: 0.6, visibleAboveM: 40_000, label: 'WMS: NASA Blue Marble', description: 'NASA GIBS WMS · global overview, appears when zoomed out', enabled: false, status: 'idle' },
-    { id: 'terrain', label: 'Digital Elevation Model', description: 'Cesium World Terrain (needs ion token)', enabled: false, status: 'idle' },
-    { id: 'tileset', visibleBelowM: 10_000, label: '3D Tileset: OSM Buildings', description: 'Cesium 3D Tiles (needs ion token) · shows when closer than 10 km', enabled: false, status: 'idle' },
+    { id: 'terrain', requiresToken: true, label: 'Digital Elevation Model', description: 'Cesium World Terrain (needs ion token)', enabled: false, status: 'idle' },
+    { id: 'tileset', requiresToken: true, visibleBelowM: 10_000, label: '3D Tileset: OSM Buildings', description: 'Cesium 3D Tiles (needs ion token) · shows when closer than 10 km', enabled: false, status: 'idle' },
     { id: 'assets', label: 'Infrastructure assets', description: 'GeoJSON from REST endpoint', enabled: true, status: 'idle' },
     { id: 'czml', label: 'Live inspection drone', description: 'Time-dynamic CZML feed', enabled: false, status: 'idle' },
   ],
@@ -66,7 +67,8 @@ export function reducer(state: AppState, action: Action): AppState {
 const Ctx = createContext<{ state: AppState; dispatch: Dispatch<Action> } | null>(null);
 
 export function AppProvider({ children }: { children: ReactNode }) {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  // On phones the sidebar starts closed, so the map is visible first.
+  const [state, dispatch] = useReducer(reducer, undefined, () => ({ ...initialState, sidebarOpen: !isSmallScreen() }));
   return <Ctx.Provider value={{ state, dispatch }}>{children}</Ctx.Provider>;
 }
 

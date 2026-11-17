@@ -1,3 +1,4 @@
+import { memo } from 'react';
 import styles from '../styles/ui.module.css';
 
 const ITEMS = [
@@ -7,7 +8,7 @@ const ITEMS = [
 ];
 
 /** Explains the colours of the pins and 3D boxes from the Infrastructure assets layer. */
-export function Legend() {
+function LegendBase() {
   return (
     <section className={styles.panel} aria-label="Legend">
       <h2 className={styles.h2}>Legend</h2>
@@ -26,3 +27,5 @@ export function Legend() {
     </section>
   );
 }
+
+export const Legend = memo(LegendBase);

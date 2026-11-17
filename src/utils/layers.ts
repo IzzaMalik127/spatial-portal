@@ -1,8 +1,9 @@
 import * as Cesium from 'cesium';
+import { HAS_ION_TOKEN, isSmallScreen, isTouchDevice } from '../config';
 import { fetchAssets, fetchCzml } from '../services/api';
 import type { LayerId } from '../types';
 
-export const hasIonToken = Boolean(import.meta.env.VITE_CESIUM_ION_TOKEN);
+export const hasIonToken = HAS_ION_TOKEN;
 
 export type LayerResource =
   | Cesium.ImageryLayer
@@ -12,9 +13,24 @@ export type LayerResource =
   | Cesium.TerrainProvider;
 
 /** Adds an imagery layer; satellite is kept at the bottom and WMS on top so blending looks right. */
+/** Built-in (bundled with the app, works offline) low-detail world map kept at the very bottom. */
+const builtInBase = new WeakMap<Cesium.Viewer, Cesium.ImageryLayer>();
+
+export async function addBuiltInBaseMap(viewer: Cesium.Viewer) {
+  const provider = await Cesium.TileMapServiceImageryProvider.fromUrl(
+    Cesium.buildModuleUrl('Assets/Textures/NaturalEarthII'),
+  );
+  if (viewer.isDestroyed()) return;
+  builtInBase.set(viewer, viewer.imageryLayers.addImageryProvider(provider, 0));
+}
+
 function addImagery(viewer: Cesium.Viewer, provider: Cesium.ImageryProvider, position?: 'bottom' | 'top') {
   const layer = viewer.imageryLayers.addImageryProvider(provider);
-  if (position === 'bottom') viewer.imageryLayers.lowerToBottom(layer);
+  if (position === 'bottom') {
+    viewer.imageryLayers.lowerToBottom(layer);
+    const base = builtInBase.get(viewer);
+    if (base) viewer.imageryLayers.lowerToBottom(base); // the built-in map always stays underneath
+  }
   if (position === 'top') viewer.imageryLayers.raiseToTop(layer);
   return layer;
 }
@@ -72,7 +88,9 @@ export async function addLayer(viewer: Cesium.Viewer, id: LayerId): Promise<Laye
     case 'tileset': {
       requireToken();
       const tileset = await Cesium.createOsmBuildingsAsync();
-      tileset.maximumScreenSpaceError = 24; // fewer tiles per frame: better FPS
+      // Fewer, coarser tiles per frame = faster; phones get a lighter setting still.
+      tileset.maximumScreenSpaceError = isSmallScreen() || isTouchDevice() ? 32 : 24;
+      tileset.skipLevelOfDetail = true; // show something sooner while finer tiles stream in
       tileset.dynamicScreenSpaceError = true;
       tileset.style = new Cesium.Cesium3DTileStyle({ color: "color('#d9dde3')" }); // soft light gray, not dark slate
       viewer.scene.primitives.add(tileset);
